@@ -45,6 +45,12 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- Logging -->
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-core</artifactId>
+            <version>1.11.2</version>
+        </dependency>
 	</dependencies>
 
 	<build>
