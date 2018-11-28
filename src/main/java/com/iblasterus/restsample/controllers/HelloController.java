@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hello World controller
  */
 @Controller
 public class HelloController {
+
+    Logger logger = LoggerFactory.getLogger(HelloController.class);
+
     /**
      * Simple request "Hello World!"
      *
@@ -41,6 +46,7 @@ public class HelloController {
     Greeting greeting(@RequestBody final User request) {
         Greeting response = new Greeting();
         response.setGreeting("Hello, " + request.getUsername());
+        logger.info("RESPONSE:\n" + response.toString());
         return response;
     }
 }
