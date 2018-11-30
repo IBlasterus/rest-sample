@@ -4,6 +4,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Enumeration;
+import org.apache.commons.io.IOUtils;
 
 public class LogFilter implements Filter {
 
@@ -18,12 +19,16 @@ public class LogFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         var request = (HttpServletRequest) servletRequest;
+        var wrappedRequest = new MultiReadHttpServletRequest(request);
         var reqLog = new RequestLog();
         var resLog = new ResponseLog();
 
         // ===Request===
         // url
         reqLog.setUrl(request.getRequestURL().toString());
+
+        // method
+        reqLog.setMethod(request.getMethod());
 
         // headers
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -37,6 +42,10 @@ public class LogFilter implements Filter {
         reqLog.setHeaders(headers.toString());
 
         // body
+        if ("POST".equalsIgnoreCase(request.getMethod()))
+        {
+            reqLog.setBody(IOUtils.toString(wrappedRequest.getReader()));
+        }
 
         System.out.println(reqLog.toString());
         System.out.println(resLog.toString());

@@ -2,6 +2,7 @@ package com.iblasterus.restsample.logging;
 
 public class RequestLog {
     private String url;
+    private String method;
     private String headers;
     private String body;
 
@@ -11,6 +12,14 @@ public class RequestLog {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public String getHeaders() {
@@ -33,6 +42,7 @@ public class RequestLog {
     public String toString() {
         return "REQUEST:\n--------\n" +
                 "url: " + url + "\n" +
+                "method: " + method + "\n" +
                 "headers: " + headers + "\n" +
                 "body:\n" + body + "\n";
     }
