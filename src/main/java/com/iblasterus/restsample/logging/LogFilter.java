@@ -19,7 +19,6 @@ public class LogFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         var request = (HttpServletRequest) servletRequest;
-        var wrappedRequest = new MultiReadHttpServletRequest(request);
         var reqLog = new RequestLog();
         var resLog = new ResponseLog();
 
@@ -44,7 +43,7 @@ public class LogFilter implements Filter {
         // body
         if ("POST".equalsIgnoreCase(request.getMethod()))
         {
-            reqLog.setBody(IOUtils.toString(wrappedRequest.getReader()));
+            reqLog.setBody(IOUtils.toString(request.getReader()));
         }
 
         System.out.println(reqLog.toString());
