@@ -2,6 +2,7 @@ package com.iblasterus.restsample.logging;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 import org.apache.commons.io.IOUtils;
@@ -18,7 +19,8 @@ public class LogFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        var request = (HttpServletRequest) servletRequest;
+        var request = new MyRequestWrapper((HttpServletRequest) servletRequest);
+
         var reqLog = new RequestLog();
         var resLog = new ResponseLog();
 
@@ -43,13 +45,13 @@ public class LogFilter implements Filter {
         // body
         if ("POST".equalsIgnoreCase(request.getMethod()))
         {
-            reqLog.setBody(IOUtils.toString(request.getReader()));
+            reqLog.setBody(request.getBody());
         }
 
         System.out.println(reqLog.toString());
         System.out.println(resLog.toString());
 
         // Разрешить request продвигаться дальше. (Перейти данный Filter).
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(request, servletResponse);
     }
 }
