@@ -48,10 +48,15 @@ public class LogFilter implements Filter {
             reqLog.setBody(request.getBody());
         }
 
+        // ===Response===
+        // httpCode
+        resLog.setHttpCode("");
+
+        // Print log
         System.out.println(reqLog.toString());
         System.out.println(resLog.toString());
 
-        // Разрешить request продвигаться дальше. (Перейти данный Filter).
+        // Allow request and response move on. (trough the Filter).
         filterChain.doFilter(request, servletResponse);
     }
 }
