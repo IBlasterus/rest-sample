@@ -3,7 +3,11 @@ package com.iblasterus.restsample.logging;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Enumeration;
 import org.apache.commons.io.IOUtils;
 
@@ -48,15 +52,30 @@ public class LogFilter implements Filter {
             reqLog.setBody(request.getBody());
         }
 
+        // Allow request and response move on. (trough the Filter).
+        filterChain.doFilter(request, servletResponse);
+
         // ===Response===
+        var response = (HttpServletResponse) servletResponse;
+
         // httpCode
-        resLog.setHttpCode("");
+        Integer httpCode = response.getStatus();
+        resLog.setHttpCode(httpCode.toString());
+
+        // headers
+        Collection<String> resHeaderNames = response.getHeaderNames();
+        var resHeaders = new StringBuilder();
+        if (resHeaderNames != null) {
+            for (String headerName : resHeaderNames) {
+                resHeaders.append(headerName + "=" + request.getHeader(headerName) + "; ");
+            }
+        }
+        resLog.setHeaders(resHeaders.toString());
+
+        // body
 
         // Print log
         System.out.println(reqLog.toString());
         System.out.println(resLog.toString());
-
-        // Allow request and response move on. (trough the Filter).
-        filterChain.doFilter(request, servletResponse);
     }
 }
