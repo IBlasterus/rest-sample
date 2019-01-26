@@ -67,7 +67,7 @@ public class LogFilter implements Filter {
         var resHeaders = new StringBuilder();
         if (resHeaderNames != null) {
             for (String headerName : resHeaderNames) {
-                resHeaders.append(headerName + "=" + request.getHeader(headerName) + "; ");
+                resHeaders.append(headerName + "=" + response.getHeader(headerName) + "; ");
             }
         }
         resLog.setHeaders(resHeaders.toString());
