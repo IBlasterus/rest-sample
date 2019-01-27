@@ -24,6 +24,7 @@ public class LogFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         var request = new MyRequestWrapper((HttpServletRequest) servletRequest);
+        var response = new MyResponseWrapper((HttpServletResponse) servletResponse);
 
         var reqLog = new RequestLog();
         var resLog = new ResponseLog();
@@ -53,10 +54,9 @@ public class LogFilter implements Filter {
         }
 
         // Allow request and response move on. (trough the Filter).
-        filterChain.doFilter(request, servletResponse);
+        filterChain.doFilter(request, response);
 
         // ===Response===
-        var response = (HttpServletResponse) servletResponse;
 
         // httpCode
         Integer httpCode = response.getStatus();
@@ -73,6 +73,7 @@ public class LogFilter implements Filter {
         resLog.setHeaders(resHeaders.toString());
 
         // body
+        resLog.setBody(response.getBody());
 
         // Print log
         System.out.println(reqLog.toString());
